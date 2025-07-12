@@ -35,3 +35,52 @@ val_generator = train_datagen.flow_from_directory(
     class_mode='categorical',
     subset='validation'              # 20% data
 )
+
+num_classes = len(train_generator.class_indices)
+print("Class Labels:", train_generator.class_indices)
+
+# CNN model
+model = models.Sequential([
+    layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)),
+    layers.MaxPooling2D(2, 2),
+
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.MaxPooling2D(2, 2),
+
+    layers.Conv2D(128, (3, 3), activation='relu'),
+    layers.MaxPooling2D(2, 2),
+
+    layers.Flatten(),
+    layers.Dense(128, activation='relu'),
+    layers.Dropout(0.3),  # prevents overfitting
+    layers.Dense(num_classes, activation='softmax')  # final output layer
+])
+
+# Compile the model
+model.compile(
+    optimizer='adam',
+    loss='categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+# Summary (optional, for confirmation)
+model.summary()
+
+early_stop = EarlyStopping(
+    monitor='val_loss',
+    patience=3,
+    restore_best_weights=True
+)
+
+# Train the model
+history = model.fit(
+    train_generator,
+    validation_data=val_generator,
+    epochs=EPOCHS,
+    callbacks=[early_stop]
+)
+
+os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
+
+model.save(model_save_path)
+print(f" Model saved at: {model_save_path}")
