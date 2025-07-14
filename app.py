@@ -102,7 +102,7 @@ if st.session_state.show_popup:
             🧠 <strong>Model Prediction</strong><br><br>
             This image is most likely a <strong style='color:#1b5e20;'>{predicted_class}</strong> 🐾
             <br><br>
-            <a href='/' target='_self' class='btn-refresh' style='color: white;'>🔄 Refresh</a>
+            <a href='/' target='_self' class='btn-refresh' style='color: white;'> Close </a>
             </div>
     """, unsafe_allow_html=True)
 
