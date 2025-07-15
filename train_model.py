@@ -1,21 +1,20 @@
 import os
-import numpy as np
-import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
+# import numpy as np
+# import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator #load_img, img_to_array
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras import layers, models
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from tensorflow.keras.optimizers import Adam
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
-# === CONFIG ===
-dataset_path = 'dataset'  # Folder with folders like: goat/, camel/, chicken/
+
+dataset_path = 'dataset'  
 model_save_path = 'model/best_mobilenetv2_model.h5'
 IMAGE_SIZE = (224, 224)
 BATCH_SIZE = 32
 EPOCHS = 25
 
-# === DATA PREPROCESSING ===
 train_datagen = ImageDataGenerator(
     rescale=1./255,
     validation_split=0.2,
@@ -45,12 +44,10 @@ val_generator = train_datagen.flow_from_directory(
     shuffle=False
 )
 
-# Save class labels
 class_indices = train_generator.class_indices
 labels = {v: k for k, v in class_indices.items()}
 print("Class Labels:", labels)
 
-# === MODEL BUILDING ===
 base_model = MobileNetV2(input_shape=(224, 224, 3), include_top=False, weights='imagenet')
 base_model.trainable = True
 for layer in base_model.layers[:-40]:
@@ -75,20 +72,16 @@ model.compile(
 
 model.summary()
 
-# === CALLBACKS ===
 early_stop = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True, verbose=1)
 checkpoint = ModelCheckpoint(model_save_path, monitor='val_accuracy', save_best_only=True, verbose=1)
 lr_reduce = ReduceLROnPlateau(monitor='val_loss', patience=2, factor=0.2, verbose=1)
 
-# === TRAINING ===
 history = model.fit(
     train_generator,
     validation_data=val_generator,
     epochs=EPOCHS,
     callbacks=[early_stop, checkpoint, lr_reduce]
 )
-
-# === SAVE MODEL ===
 os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
 model.save(model_save_path)
 print(f"✅ Model saved at: {model_save_path}")

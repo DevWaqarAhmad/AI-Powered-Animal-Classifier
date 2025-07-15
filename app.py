@@ -3,14 +3,12 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
-# Set page config
+
 st.set_page_config(page_title="AI Animal Classifier", layout="centered")
 
-# Initialize session state to handle popup visibility
 if "show_popup" not in st.session_state:
     st.session_state.show_popup = False
 
-# --- Custom CSS ---
 st.markdown("""
     <style>
     .main {
@@ -54,16 +52,14 @@ st.markdown('<div class="main"><div class="title">🐾 AI Animal Classifier App 
 # </a>
 # """, unsafe_allow_html=True)
 
-# --- Load Model ---
 model_path = "model/animal_model.h5"
 model = tf.keras.models.load_model(model_path)
 
-# --- Class Labels ---
 class_labels = ['Crocodile', 'Camel', 'Cat', 'Chicken', 'Cow', 'Deer', 'Dog',
                 'Donkey', 'Elephant', 'Fish', 'Foxe', 'Giraffe', 'Goat',
                 'Horse', 'Kangaro', 'Leopard', 'Lion', 'Monkey', 'Panda']
 
-# --- File Upload ---
+
 uploaded_file = st.file_uploader("📤 Upload an animal image", type=["jpg", "jpeg", "png", "webp"])
 
 if uploaded_file:
@@ -80,7 +76,6 @@ if uploaded_file:
 
     st.session_state.show_popup = True
 
-# --- Display Popup ---
 if st.session_state.show_popup:
     st.markdown(f"""
         <div style="
@@ -106,5 +101,5 @@ if st.session_state.show_popup:
             </div>
     """, unsafe_allow_html=True)
 
-# --- Close Main Div ---
+
 st.markdown("</div>", unsafe_allow_html=True)
