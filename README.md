@@ -24,7 +24,7 @@ A deep learning-based web app that predicts the animal species from an uploaded 
 | Upload Interface | Prediction Popup |
 |------------------|------------------|
 | ![Upload Interface](images/1.png) | ![Popup Result](images/2.png) |
-| ![Another View](images/3.png) | ![Final Prediction](images/4.png) |
+| ![Another View](images/3.png) | 
 
 ---
 
