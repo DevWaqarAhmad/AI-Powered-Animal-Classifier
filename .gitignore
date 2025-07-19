@@ -1,1 +1,7 @@
+__pycache__/
+*.pyc
 env
+*.h5
+weights/
+.vscode/
+.ipynb_checkpoints/
